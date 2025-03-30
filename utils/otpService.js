@@ -7,8 +7,6 @@ exports.generateAndSendOTP = async (user) => {
   // Generate a 6 digit OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   
-  // Store the OTP directly (for debugging purposes)
-  // In production, you'd want to hash this
   user.otp = otp;
   
   // Set expire time - 10 minutes from now
@@ -55,7 +53,6 @@ exports.verifyOTP = async (email, otp) => {
   // For debugging (remove in production)
   console.log(`Verifying OTP: ${otp} for email: ${email}`);
   
-  // Find user by email with OTP that hasn't expired
   const user = await User.findOne({
     email,
     otp: otp,
@@ -66,7 +63,6 @@ exports.verifyOTP = async (email, otp) => {
   if (!user) {
     console.log('No user found with matching OTP or OTP expired');
     
-    // Additional debug info - find user without OTP check
     const userExists = await User.findOne({ email });
     if (userExists) {
       console.log('User exists with this email, but OTP does not match or has expired');
