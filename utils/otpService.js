@@ -9,12 +9,11 @@ exports.generateAndSendOTP = async (user) => {
   
   user.otp = otp;
   
-  // Set expire time - 10 minutes from now
+  // Set expire time 
   user.otpExpire = Date.now() + 10 * 60 * 1000;
   
   await user.save({ validateBeforeSave: false });
 
-  // Log for debugging (remove in production)
   console.log(`Generated OTP for ${user.email}: ${otp}`);
 
   // Create email template
@@ -50,7 +49,6 @@ exports.generateAndSendOTP = async (user) => {
 
 // Verify OTP
 exports.verifyOTP = async (email, otp) => {
-  // For debugging (remove in production)
   console.log(`Verifying OTP: ${otp} for email: ${email}`);
   
   const user = await User.findOne({
@@ -59,7 +57,6 @@ exports.verifyOTP = async (email, otp) => {
     otpExpire: { $gt: Date.now() }
   });
 
-  // For debugging (remove in production)
   if (!user) {
     console.log('No user found with matching OTP or OTP expired');
     
